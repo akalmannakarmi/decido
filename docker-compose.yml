@@ -23,6 +23,9 @@ services:
     env_file:
       - .env
       - services/auth-service/.env
+    volumes:
+      - ./services/auth-service/alembic:/app/alembic
+      - ./services/auth-service/internal:/app/internal
     depends_on:
       postgres:
         condition: service_healthy
@@ -36,6 +39,9 @@ services:
     env_file:
       - .env
       - services/ballot-service/.env
+    volumes:
+      - ./services/ballot-service/alembic:/app/alembic
+      - ./services/ballot-service/internal:/app/internal
     depends_on:
       postgres:
         condition: service_healthy
@@ -51,6 +57,9 @@ services:
     env_file:
       - .env
       - services/vote-service/.env
+    volumes:
+      - ./services/vote-service/alembic:/app/alembic
+      - ./services/vote-service/internal:/app/internal
     depends_on:
       postgres:
         condition: service_healthy
