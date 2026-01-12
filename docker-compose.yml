@@ -19,6 +19,7 @@ services:
   auth-service:
     build:
       context: services/auth-service
+    command: uvicorn cmd.server.main:app --host 0.0.0.0 --port 8000 --reload 
     container_name: auth-service
     env_file:
       - .env
@@ -35,6 +36,7 @@ services:
   ballot-service:
     build:
       context: services/ballot-service
+    command: uvicorn cmd.server.main:app --host 0.0.0.0 --port 8000 --reload 
     container_name: ballot-service
     env_file:
       - .env
@@ -53,6 +55,7 @@ services:
   vote-service:
     build:
       context: services/vote-service
+    command: uvicorn cmd.server.main:app --host 0.0.0.0 --port 8000 --reload 
     container_name: vote-service
     env_file:
       - .env
