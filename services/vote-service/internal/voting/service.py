@@ -11,19 +11,16 @@ class VoteService:
         self.repo = VoteRepo(db)
 
     def cast_vote(self, ballot_id: int, user_id: int, choice: int):
-        # 1. Check ballot state
-        resp = requests.get(
-            f"{settings.ballot_service_url}/ballots/{ballot_id}"
-        )
+        # resp = requests.gt(
+        #     f"{settings.ballot_service_url}/ballots/{ballot_id}"
+        # )
+        #
+        # if resp.status_code != 200:
+        #     raise ValueError("Ballot not found")
+        #
+        # ballot = resp.json()
+        # ensure_ballot_active(ballot["is_active"])
 
-        if resp.status_code != 200:
-            raise ValueError("Ballot not found")
-
-        ballot = resp.json()
-        ensure_ballot_active(ballot["is_active"])
-
-        # 2. Ensure user has not voted
         ensure_not_voted(self.repo.has_voted(ballot_id, user_id))
 
-        # 3. Record vote (DB enforces uniqueness)
         return self.repo.create_vote(ballot_id, user_id, choice)

@@ -9,18 +9,14 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/login")
 def get_current_user(token: str = Depends(oauth2_scheme)):
     try:
         payload = decode_access_token(token)
+        user_id: str | None = payload.get("sub")
 
-        if payload.get("typ") != "user":
-            raise ValueError()
-
-        user_id = payload.get("sub")
-        if not user_id:
-            raise ValueError()
-
+        if user_id is None:
+            raise ValueError("Invalid token payload")
+        
         return int(user_id)
-
     except ValueError:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Invalid authentication",
+            detail="Could not validate credentials",
         )

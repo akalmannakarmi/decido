@@ -11,7 +11,7 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/*
 
 
-RUN useradd -m -u 10001 appuser
+RUN useradd -m -u 1000 appuser
 
 WORKDIR /app
 
