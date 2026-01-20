@@ -1,7 +1,7 @@
 services:
   db:
     image: postgres:17
-    container_name: sample-db
+    container_name: db
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
@@ -47,23 +47,32 @@ services:
 
   celery:
     build: .
-    command: celery -A app.config worker -l info
+    container_name: worker
+    command: celery -A app.core.celery.celery_app worker -l debug
     env_file:
       - .env
     volumes:
       - .:/app
     depends_on:
-      - redis
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
 
   celery-beat:
     build: .
-    command: celery -A app.config beat -l info
+    container_name: beat
+    command: celery -A app.core.celery.celery_app beat -l debug
     env_file:
       - .env
     volumes:
       - .:/app
     depends_on:
-      - redis
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
 volumes:
   postgres_data:
   redis_data:
